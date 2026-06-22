@@ -1,15 +1,10 @@
-# dependencies
-node_modules
-
-# build
-dist
-dist-ssr
-*.local
-
-# editor / os
-.DS_Store
-.vscode/*
-!.vscode/extensions.json
-.idea
+node_modules/
+dist/
+.env
+.env.local
 *.log
-npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# graphify
+graphify-out/

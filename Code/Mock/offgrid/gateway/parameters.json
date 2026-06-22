@@ -1,0 +1,85 @@
+{
+  "comment": "Liste des variables EMS exposees via OPC-UA. C'est l'unique source de verite : ajouter un parametre = ajouter une entree ici (cote WAGO il faut qu'elle soit cochee dans la Symbol Configuration). Les bornes min/max sont les garde-fous appliques cote serveur ET cote interface.",
+  "writable": [
+    {
+      "id": "consigneECS",
+      "nodeId": "ns=1;s=EMS.consigneECS",
+      "label": "Consigne eau chaude",
+      "group": "Thermique",
+      "kind": "number",
+      "unit": "\u00b0C",
+      "min": 40,
+      "max": 60,
+      "step": 1,
+      "dataType": "Double"
+    },
+    {
+      "id": "puissanceChauffeMax",
+      "nodeId": "ns=1;s=EMS.puissanceChauffeMax",
+      "label": "Puissance chauffe max",
+      "group": "Thermique",
+      "kind": "number",
+      "unit": "W",
+      "min": 500,
+      "max": 3000,
+      "step": 100,
+      "dataType": "Double"
+    },
+    {
+      "id": "seuilDelestageSOC",
+      "nodeId": "ns=1;s=EMS.seuilDelestageSOC",
+      "label": "Seuil de d\u00e9lestage batterie",
+      "group": "\u00c9nergie",
+      "kind": "number",
+      "unit": "%",
+      "min": 20,
+      "max": 80,
+      "step": 5,
+      "dataType": "Double"
+    },
+    {
+      "id": "modeFonctionnement",
+      "nodeId": "ns=1;s=EMS.modeFonctionnement",
+      "label": "Mode de fonctionnement",
+      "group": "Pilotage",
+      "kind": "enum",
+      "dataType": "Int16",
+      "options": [
+        { "value": 0, "label": "\u00c9co" },
+        { "value": 1, "label": "Confort" },
+        { "value": 2, "label": "Hiver" }
+      ]
+    },
+    {
+      "id": "chauffageActif",
+      "nodeId": "ns=1;s=EMS.chauffageActif",
+      "label": "Chauffage d'appoint",
+      "group": "Pilotage",
+      "kind": "boolean",
+      "dataType": "Boolean"
+    }
+  ],
+  "readonly": [
+    {
+      "id": "socBatterie",
+      "nodeId": "ns=1;s=EMS.socBatterie",
+      "label": "Charge batterie",
+      "group": "Mesures",
+      "unit": "%"
+    },
+    {
+      "id": "puissancePV",
+      "nodeId": "ns=1;s=EMS.puissancePV",
+      "label": "Production solaire",
+      "group": "Mesures",
+      "unit": "W"
+    },
+    {
+      "id": "tempBallon",
+      "nodeId": "ns=1;s=EMS.tempBallon",
+      "label": "Temp\u00e9rature ballon",
+      "group": "Mesures",
+      "unit": "\u00b0C"
+    }
+  ]
+}

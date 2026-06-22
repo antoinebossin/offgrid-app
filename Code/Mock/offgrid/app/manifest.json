@@ -1,0 +1,12 @@
+{
+  "name": "Off-the-Grid",
+  "short_name": "Off-Grid",
+  "description": "Pilotage a distance de l'EMS Off-the-Grid",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0E1614",
+  "theme_color": "#0E1614",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}

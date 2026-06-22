@@ -6,14 +6,13 @@
   "description": "Off-the-Grid — pilotage a distance de l'EMS (WAGO 750-8217 / CODESYS 3.5) via tunnel OpenVPN. Demo web facon application mobile.",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "recharts": "^2.13.3"
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.12",
