@@ -1,89 +1,156 @@
-import type { MeasurementPoint, MetricCategory } from '../types/telemetry'
+import type { MeasurementPoint, MetricGroup } from '../types/telemetry'
 
-// Metadonnees par categorie (libelle + couleur d'accent).
-export const CATEGORY_META: Record<MetricCategory, { label: string; color: string }> = {
-  pv: { label: 'Photovoltaïque', color: '#F59E0B' },
-  thermal: { label: 'Solaire thermique', color: '#FB923C' },
+// Metadonnees par groupe (libelle + couleur d'accent, coherentes avec la DA).
+export const GROUP_META: Record<MetricGroup, { label: string; color: string }> = {
+  battery: { label: 'Batterie domestique', color: '#34D399' },
+  ballon: { label: 'Ballons', color: '#FB923C' },
   boiler: { label: 'Fourneau bouilleur', color: '#EF4444' },
-  battery: { label: 'Batterie', color: '#34D399' },
-  inverter: { label: 'Onduleur', color: '#38BDF8' },
-  load: { label: 'Consommation maison', color: '#A78BFA' },
-  grid: { label: 'Réseau', color: '#94A3B8' },
-  environment: { label: 'Environnement', color: '#2DD4BF' },
-  ems: { label: 'EMS — pilotage', color: '#60A5FA' },
+  valves: { label: 'Vannes', color: '#38BDF8' },
+  ambient: { label: 'Ambiances', color: '#2DD4BF' },
+  pv: { label: 'Photovoltaïque', color: '#F59E0B' },
+  flows: { label: 'Flux énergétiques', color: '#A78BFA' },
+  ems: { label: 'Pilotage', color: '#60A5FA' },
 }
 
-// ~46 points de mesure, representatifs de l'installation de Montchauvel.
-export const MEASUREMENT_POINTS: MeasurementPoint[] = [
-  // --- Photovoltaique
-  { id: 'pv_power', label: 'Puissance PV', unit: 'W', category: 'pv' },
-  { id: 'pv_voltage', label: 'Tension PV', unit: 'V', category: 'pv', decimals: 1 },
-  { id: 'pv_current', label: 'Courant PV', unit: 'A', category: 'pv', decimals: 1 },
-  { id: 'pv_energy_today', label: 'Énergie PV (jour)', unit: 'kWh', category: 'pv', decimals: 1 },
-  { id: 'pv_string1_power', label: 'String 1', unit: 'W', category: 'pv' },
-  { id: 'pv_string2_power', label: 'String 2', unit: 'W', category: 'pv' },
+// --- Seuils d'alarme ballon (G_Parameters, valeurs Codesys reelles) --------
+export const SEUILS = {
+  ballon_H: 75, // Alarme_Ballon_Seuil_Temp_H
+  ballon_B1: 55, // Alarme_Ballon_Seuil1_Temp_B
+  ballon_B2: 65, // Alarme_Ballon_Seuil2_Temp_B
+}
 
-  // --- Solaire thermique
-  { id: 'thermal_collector_temp', label: 'Temp. capteur', unit: '°C', category: 'thermal', decimals: 1 },
-  { id: 'thermal_tank_top', label: 'Ballon haut', unit: '°C', category: 'thermal', decimals: 1 },
-  { id: 'thermal_tank_bottom', label: 'Ballon bas', unit: '°C', category: 'thermal', decimals: 1 },
-  { id: 'thermal_power', label: 'Puissance thermique', unit: 'W', category: 'thermal' },
-  { id: 'thermal_flow', label: 'Débit circulateur', unit: 'L/min', category: 'thermal', decimals: 1 },
+/**
+ * Les 5 ampoules du panneau d'etat — exactement les 5 groupes d'alarmes
+ * calcules par le programme `Alarmes` de Codesys. Chaque ampoule a 3 LED
+ * independantes (vert / jaune / rouge) pilotees par 3 variables booleennes.
+ */
+export interface AlarmLampDef {
+  key: string
+  label: string
+  /** Variable numerique illustree par l'ampoule + unite. */
+  valueId?: string
+  unit?: string
+  decimals?: number
+  /** Sous-titre : rappel des seuils. */
+  thresholds: string
+  /** ids des 3 LED (vert, jaune, rouge). */
+  green: string
+  amber: string
+  red: string
+}
+
+export const ALARM_LAMPS: AlarmLampDef[] = [
+  {
+    key: 'soc',
+    label: 'Batterie · SOC',
+    valueId: 'gBatterie_SOC',
+    unit: '%',
+    thresholds: 'Rouge < 35 · Jaune < 55 · Vert ≥ 55  (seuils à confirmer)',
+    green: 'Batterie_SOC_AlarmV',
+    amber: 'Batterie_SOC_AlarmJ',
+    red: 'Batterie_SOC_AlarmR',
+  },
+  {
+    key: 'battTemp',
+    label: 'Batterie · température',
+    valueId: 'gBatterie_Temperature',
+    unit: '°C',
+    decimals: 1,
+    thresholds: 'Vert 10–20 · Jaune 5–25 · Rouge hors 5–25  (à confirmer)',
+    green: 'Temp_Batterie_AlarmV',
+    amber: 'Temp_Batterie_AlarmJ',
+    red: 'Temp_Batterie_AlarmR',
+  },
+  {
+    key: 'ballonG',
+    label: 'Ballon gauche',
+    valueId: 'gBallonHautG',
+    unit: '°C',
+    decimals: 1,
+    thresholds: `Jaune si bas > ${SEUILS.ballon_B1} · Rouge si haut > ${SEUILS.ballon_H} & bas > ${SEUILS.ballon_B2}`,
+    green: 'BallonG_AlarmV',
+    amber: 'BallonG_AlarmJ',
+    red: 'BallonG_AlarmR',
+  },
+  {
+    key: 'ballonD',
+    label: 'Ballon droit',
+    valueId: 'gBallonHautD',
+    unit: '°C',
+    decimals: 1,
+    thresholds: `Jaune si bas > ${SEUILS.ballon_B1} · Rouge si haut > ${SEUILS.ballon_H} & bas > ${SEUILS.ballon_B2}`,
+    green: 'BallonD_AlarmV',
+    amber: 'BallonD_AlarmJ',
+    red: 'BallonD_AlarmR',
+  },
+  {
+    key: 'boiler',
+    label: 'Fourneau bouilleur',
+    valueId: 'rValue_RTemp_2',
+    unit: '°C',
+    decimals: 1,
+    thresholds: 'Jaune entrée > 40 · Rouge entrée > 50 / chauffe rapide',
+    green: 'Bouilleur_AlarmV',
+    amber: 'Bouilleur_AlarmJ',
+    red: 'Bouilleur_AlarmR',
+  },
+]
+
+// --- Vannes (3 vannes, chacune ouverte/fermee) ------------------------------
+export const VALVES = [
+  { key: 'HD', label: 'Vanne haute droite', open: 'VanneHD_Ouverte', close: 'VanneHD_Fermee' },
+  { key: 'HG', label: 'Vanne haute gauche', open: 'VanneHG_Ouverte', close: 'VanneHG_Fermee' },
+  { key: 'M', label: 'Vanne milieu', open: 'VanneM_Ouverte', close: 'VanneM_Fermee' },
+]
+
+// ---------------------------------------------------------------------------
+// Catalogue des points de mesure, avec le nom EXACT de la variable Codesys.
+// ---------------------------------------------------------------------------
+export const MEASUREMENT_POINTS: MeasurementPoint[] = [
+  // --- Batterie domestique
+  { id: 'gBatterie_SOC', label: 'État de charge', unit: '%', group: 'battery', codesys: 'G_Sensors.gBatterie_SOC', decimals: 0 },
+  { id: 'gBatterie_Temperature', label: 'Température', unit: '°C', group: 'battery', codesys: 'G_Sensors.gBatterie_Temperature', decimals: 1 },
+  { id: 'gBatterie_Puissance', label: 'Puissance', unit: 'W', group: 'battery', codesys: 'G_Sensors.gBatterie_Puissance' },
+
+  // --- Ballons (haut / bas · droite / gauche)
+  { id: 'gBallonHautD', label: 'Ballon droit · haut', unit: '°C', group: 'ballon', codesys: 'G_Sensors.gBallonHautD', decimals: 1 },
+  { id: 'gBallonBasD', label: 'Ballon droit · bas', unit: '°C', group: 'ballon', codesys: 'G_Sensors.gBallonBasD', decimals: 1 },
+  { id: 'gBallonHautG', label: 'Ballon gauche · haut', unit: '°C', group: 'ballon', codesys: 'G_Sensors.gBallonHautG', decimals: 1 },
+  { id: 'gBallonBasG', label: 'Ballon gauche · bas', unit: '°C', group: 'ballon', codesys: 'G_Sensors.gBallonBasG', decimals: 1 },
 
   // --- Fourneau bouilleur
-  { id: 'boiler_state', label: 'État fourneau', unit: '', category: 'boiler', enumLabels: ['Arrêt', 'Marche'] },
-  { id: 'boiler_temp', label: 'Temp. foyer', unit: '°C', category: 'boiler', decimals: 0 },
-  { id: 'boiler_flow_temp', label: 'Temp. départ', unit: '°C', category: 'boiler', decimals: 1 },
+  { id: 'rValue_RTemp_2', label: 'Temp. entrée fourneau', unit: '°C', group: 'boiler', codesys: 'PLC_MultiTel.rValue_RTemp_2', decimals: 1 },
+  { id: 'gBoiler_Power', label: 'Flux thermique bouilleur', unit: 'W', group: 'boiler', codesys: 'G_Computed.gBoiler_Power' },
+  { id: 'xBouilleur', label: 'Fourneau en marche', unit: '', group: 'boiler', codesys: 'Bouilleur.xBouilleur', enumLabels: ['Arrêt', 'Marche'] },
+  { id: 'ChauffeRapide', label: 'Chauffe rapide', unit: '', group: 'boiler', codesys: 'Historique.ChauffeRapide', enumLabels: ['Non', 'Oui'] },
 
-  // --- Batterie
-  { id: 'battery_soc', label: 'État de charge', unit: '%', category: 'battery', decimals: 0 },
-  { id: 'battery_voltage', label: 'Tension', unit: 'V', category: 'battery', decimals: 1 },
-  { id: 'battery_current', label: 'Courant', unit: 'A', category: 'battery', decimals: 1 },
-  { id: 'battery_power', label: 'Puissance', unit: 'W', category: 'battery' },
-  { id: 'battery_temp', label: 'Température', unit: '°C', category: 'battery', decimals: 1 },
-  { id: 'battery_soh', label: 'État de santé', unit: '%', category: 'battery', decimals: 0 },
-  { id: 'battery_charged_today', label: 'Chargé (jour)', unit: 'kWh', category: 'battery', decimals: 1 },
-  { id: 'battery_discharged_today', label: 'Déchargé (jour)', unit: 'kWh', category: 'battery', decimals: 1 },
+  // --- Ambiances
+  { id: 'gExterieur', label: 'Température extérieure', unit: '°C', group: 'ambient', codesys: 'G_Sensors.gExterieur', decimals: 1 },
+  { id: 'gSalon', label: 'Température salon', unit: '°C', group: 'ambient', codesys: 'G_Sensors.gSalon', decimals: 1 },
 
-  // --- Onduleur
-  { id: 'inverter_state', label: 'État onduleur', unit: '', category: 'inverter', enumLabels: ['Arrêt', 'Marche'] },
-  { id: 'inverter_power', label: 'Puissance AC', unit: 'W', category: 'inverter' },
-  { id: 'inverter_ac_voltage', label: 'Tension AC', unit: 'V', category: 'inverter', decimals: 1 },
-  { id: 'inverter_frequency', label: 'Fréquence', unit: 'Hz', category: 'inverter', decimals: 2 },
-  { id: 'inverter_temp', label: 'Température', unit: '°C', category: 'inverter', decimals: 1 },
+  // --- Photovoltaique
+  { id: 'gPV_Power', label: 'Production PV', unit: 'W', group: 'pv', codesys: 'G_Computed.gPV_Power' },
+  { id: 'gPuissance_myPV_Totale_Cable_Rest', label: 'PV → ballons (Rest)', unit: 'W', group: 'pv', codesys: 'G_Computed.gPuissance_myPV_Totale_Cable_Rest' },
+  { id: 'gSolarThermal_Power', label: 'Flux solaire thermique', unit: 'W', group: 'pv', codesys: 'G_Computed.gSolarThermal_Power' },
 
-  // --- Consommation maison
-  { id: 'load_power', label: 'Puissance totale', unit: 'W', category: 'load' },
-  { id: 'load_energy_today', label: 'Énergie (jour)', unit: 'kWh', category: 'load', decimals: 1 },
-  { id: 'load_circuit_heating', label: 'Circuit chauffage', unit: 'W', category: 'load' },
-  { id: 'load_circuit_hotwater', label: 'Circuit eau chaude', unit: 'W', category: 'load' },
-  { id: 'load_circuit_general', label: 'Circuit général', unit: 'W', category: 'load' },
+  // --- Flux (usages) — plusieurs encore a definir cote Codesys
+  { id: 'flux_radiateurs', label: 'Radiateurs', unit: 'W', group: 'flows', todo: true },
+  { id: 'flux_plancher', label: 'Plancher chauffant', unit: 'W', group: 'flows', todo: true },
+  { id: 'conso_maison', label: 'Consommation maison', unit: 'W', group: 'flows', todo: true },
+  { id: 'ev_charge', label: 'Borne de charge EV', unit: 'W', group: 'flows', todo: true },
 
-  // --- Reseau
-  { id: 'grid_connected', label: 'État réseau', unit: '', category: 'grid', enumLabels: ['Îloté', 'Connecté'] },
-  { id: 'grid_import_power', label: 'Import réseau', unit: 'W', category: 'grid' },
-  { id: 'grid_export_power', label: 'Export réseau', unit: 'W', category: 'grid' },
-
-  // --- Environnement
-  { id: 'env_outdoor_temp', label: 'Temp. extérieure', unit: '°C', category: 'environment', decimals: 1 },
-  { id: 'env_indoor_temp', label: 'Temp. intérieure', unit: '°C', category: 'environment', decimals: 1 },
-  { id: 'env_irradiance', label: 'Ensoleillement', unit: 'W/m²', category: 'environment' },
-  { id: 'env_humidity', label: 'Humidité', unit: '%', category: 'environment', decimals: 0 },
-  { id: 'env_wind', label: 'Vent', unit: 'km/h', category: 'environment', decimals: 0 },
-
-  // --- EMS (parametres pilotables a distance)
-  { id: 'ems_mode', label: 'Mode EMS', unit: '', category: 'ems', writable: true, enumLabels: ['Auto', 'Éco', 'Confort', 'Secours'] },
-  { id: 'ems_hotwater_setpoint', label: 'Consigne eau chaude', unit: '°C', category: 'ems', writable: true, decimals: 0 },
-  { id: 'ems_soc_min', label: 'Réserve batterie mini', unit: '%', category: 'ems', writable: true, decimals: 0 },
-  { id: 'ems_charge_priority', label: 'Priorité de charge', unit: '', category: 'ems', writable: true, enumLabels: ['Batterie', 'Eau chaude', 'Équilibré'] },
-  { id: 'ems_load_shedding', label: 'Délestage auto', unit: '', category: 'ems', writable: true, enumLabels: ['Désactivé', 'Activé'] },
-  { id: 'ems_backup_heater', label: 'Appoint électrique', unit: '', category: 'ems', writable: true, enumLabels: ['Désactivé', 'Activé'] },
+  // --- EMS (parametres pilotables a distance) — consignes a definir cote Codesys
+  { id: 'pv_split', label: 'Répartition PV ballons / EV', unit: '%', group: 'ems', writable: true, decimals: 0, todo: true },
+  { id: 'temp_max_ballons', label: 'Température max ballons', unit: '°C', group: 'ems', writable: true, decimals: 0, todo: true },
+  { id: 'xStop_myPV_input', label: 'Interruption chauffage élec.', unit: '', group: 'ems', writable: true, codesys: 'xStop_myPV_input', enumLabels: ['Actif', 'Coupé'] },
+  { id: 'xRest_Ballon_Gauche', label: 'Chauffage élec. ballon gauche', unit: '', group: 'ems', writable: true, codesys: 'G_Parameters.xRest_Ballon_Gauche', enumLabels: ['Coupé', 'Actif'] },
+  { id: 'xRest_Ballon_Droit', label: 'Chauffage élec. ballon droit', unit: '', group: 'ems', writable: true, codesys: 'G_Parameters.xRest_Ballon_Droit', enumLabels: ['Coupé', 'Actif'], todo: true },
 ]
 
 export const POINTS_BY_ID: Record<string, MeasurementPoint> = Object.fromEntries(
   MEASUREMENT_POINTS.map((p) => [p.id, p] as [string, MeasurementPoint]),
 )
 
-export function pointsByCategory(category: MetricCategory): MeasurementPoint[] {
-  return MEASUREMENT_POINTS.filter((p) => p.category === category)
+export function pointsByGroup(group: MetricGroup): MeasurementPoint[] {
+  return MEASUREMENT_POINTS.filter((p) => p.group === group)
 }
