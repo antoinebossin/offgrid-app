@@ -47,7 +47,10 @@ export const CONFIG = {
     runtime: 'CODESYS V3.5 SP19',
     modem: 'Quectel EC25 · SIM data Orange',
     // URL fixe de l'interface (WebVisu Codesys ou passerelle) une fois le tunnel ouvert.
-    dataUrl: 'http://10.8.0.1:8080/webvisu',
+    // Valeur actuelle : URL de test fournie par Antoine (tunnel ouvert le 24/07/2026)
+    // pour valider la connexion bout-en-bout jusqu'à la vraie WebVisu. À remplacer par
+    // l'adresse définitive une fois celle-ci connue.
+    dataUrl: 'https://100.96.1.18/webvisu/webvisu.htm',
   },
 
   pollingIntervalMs: 1000,

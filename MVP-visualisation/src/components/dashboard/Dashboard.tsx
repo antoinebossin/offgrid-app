@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Activity, AlertTriangle, Battery, Droplet, Flame, GitBranch, Power, Settings2, ShieldCheck, Sun, Thermometer } from 'lucide-react'
+import { Activity, AlertTriangle, Battery, Droplet, Flame, GitBranch, Power, Settings2, ShieldCheck, Sun, Thermometer, User } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import { useTelemetry } from '../../hooks/useTelemetry'
 import { StatusBar } from '../StatusBar'
@@ -11,7 +11,8 @@ import { EnergyFlow } from './EnergyFlow'
 import { PvChart } from './PvChart'
 import { PvControls } from './PvControls'
 import { MetricTile } from './MetricTile'
-import { POINTS_BY_ID, SEUILS } from '../../data/measurementPoints'
+import { PilotageButton } from './PilotageButton'
+import { CONFIG, POINTS_BY_ID, SEUILS } from '../../config'
 import { fmtNumber, fmtTemp } from '../../utils/format'
 import { CheckCircle2 } from 'lucide-react'
 
@@ -27,7 +28,7 @@ function Tiles({ ids, values }: { ids: string[]; values: Record<string, number> 
   )
 }
 
-export function Dashboard() {
+export function Dashboard({ onOpenProfile }: { onOpenProfile: () => void }) {
   const { disconnect } = useApp()
   const { snapshot, history } = useTelemetry()
   const [toast, setToast] = useState<string | null>(null)
@@ -57,15 +58,22 @@ export function Dashboard() {
       <div className="screen-scroll">
         <div className="dash-head">
           <div>
-            <div className="brand-name" style={{ fontSize: 16 }}>Off-the-Grid</div>
+            <div className="brand-name" style={{ fontSize: 16 }}>{CONFIG.site.name}</div>
             <span className="pill pill-ok" style={{ marginTop: 5 }}>
               <span className="dot dot-pulse" /> Connecté · OpenVPN · 4G
             </span>
           </div>
-          <button className="icon-btn" onClick={disconnect} title="Se déconnecter">
-            <Power size={18} />
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="icon-btn" onClick={onOpenProfile} title="Profil de l'installation">
+              <User size={18} />
+            </button>
+            <button className="icon-btn" onClick={disconnect} title="Se déconnecter">
+              <Power size={18} />
+            </button>
+          </div>
         </div>
+
+        <PilotageButton />
 
         {/* ================= SECTION 1 — Etat energetique ================= */}
         <div className="section-label"><span className="bar" style={{ background: '#34d399' }} /> 1 · État énergétique en un coup d'œil</div>

@@ -1,11 +1,25 @@
+import { useEffect, useState } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
 import { PhoneFrame } from './components/PhoneFrame'
 import { ConnectScreen } from './components/connect/ConnectScreen'
 import { Dashboard } from './components/dashboard/Dashboard'
+import { ProfileScreen } from './components/profile/ProfileScreen'
 
 function Screen() {
   const { state } = useApp()
-  return state === 'connected' ? <Dashboard /> : <ConnectScreen />
+  const [view, setView] = useState<'dashboard' | 'profile'>('dashboard')
+
+  // Revient au tableau de bord si on se deconnecte pendant qu'on est sur le profil.
+  useEffect(() => {
+    if (state !== 'connected') setView('dashboard')
+  }, [state])
+
+  if (state !== 'connected') return <ConnectScreen />
+  return view === 'profile' ? (
+    <ProfileScreen onBack={() => setView('dashboard')} />
+  ) : (
+    <Dashboard onOpenProfile={() => setView('profile')} />
+  )
 }
 
 function DemoSidebar() {
