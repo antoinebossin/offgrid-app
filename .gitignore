@@ -8,3 +8,19 @@ Thumbs.db
 
 # graphify
 graphify-out/
+
+# Documents et fichiers non-code (admin, commercial, projet CODESYS) —
+# ne doivent pas etre pousses sur GitHub depuis cette branche.
+Administratif/
+Propositions commerciales/
+Off-the-grid-travail/
+Version_epuree_code/
+Code/Accès_Wago_et_VPN/
+Code/*.docx
+Code/*.project
+
+# Artefacts binaires/generes CODESYS (au cas ou ils apparaitraient ailleurs)
+*.opt
+*.compileinfo
+*.precompilecache
+*.project.~u
