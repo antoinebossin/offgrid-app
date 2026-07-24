@@ -1,4 +1,4 @@
-import { ALARM_LAMPS, type AlarmLampDef } from '../../data/measurementPoints'
+import { ALARM_LAMPS, type AlarmLampDef } from '../../config'
 import { LED_COLORS, fmtNumber } from '../../utils/format'
 import type { LedLevel } from '../../types/telemetry'
 

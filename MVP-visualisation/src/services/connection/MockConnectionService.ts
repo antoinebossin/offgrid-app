@@ -1,6 +1,6 @@
 import type { ConnectionService } from './ConnectionService'
 import type { ConnectionStep } from '../../types/telemetry'
-import { CONFIG } from '../config'
+import { CONFIG } from '../../config'
 
 const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms))
 

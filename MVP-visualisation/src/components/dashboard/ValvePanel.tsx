@@ -1,4 +1,4 @@
-import { VALVES } from '../../data/measurementPoints'
+import { VALVES } from '../../config'
 
 /**
  * Position des 3 vannes (haute droite, haute gauche, milieu). Chaque vanne

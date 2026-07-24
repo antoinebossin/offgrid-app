@@ -1,4 +1,64 @@
-import type { MeasurementPoint, MetricGroup } from '../types/telemetry'
+// ---------------------------------------------------------------------------
+// SOURCE UNIQUE DE VERITE de l'app. Pour dupliquer la solution sur une autre
+// installation : ne modifier QUE ce fichier (identite du site, connexion,
+// catalogue de paramètres). Aucune autre valeur d'installation ne doit être
+// codée en dur ailleurs dans src/.
+//
+// En demo, le tunnel OpenVPN est SIMULE. En production, ces valeurs decrivent
+// l'installation reelle ciblee.
+// ---------------------------------------------------------------------------
+
+import type { MeasurementPoint, MetricGroup } from './types/telemetry'
+
+/** Identite du site (nom, logo, localisation) — a changer pour dupliquer l'app. */
+export interface SiteIdentity {
+  /** Nom affiche dans le header / l'ecran de connexion. */
+  name: string
+  /** Sous-titre sous le nom (ex: localisation + fonction). */
+  tagline: string
+  /** Localisation courte (utilisee dans les textes). */
+  location: string
+  /**
+   * Chemin vers un logo (place le fichier dans public/ et reference-le ici,
+   * ex: '/logo-client.svg'). Laisser `null` pour utiliser l'icone par defaut.
+   */
+  logoSrc: string | null
+}
+
+export const CONFIG = {
+  site: {
+    name: 'Off-the-Grid',
+    tagline: 'Montchauvel · Pilotage à distance',
+    location: 'Montchauvel',
+    logoSrc: null,
+  } satisfies SiteIdentity,
+
+  // Profil / endpoint OpenVPN (la "URL fixe" evoquee par Francois).
+  vpn: {
+    profile: 'offgrid-montchauvel.ovpn',
+    endpoint: 'vpn.offgrid.local:1194',
+    protocol: 'UDP',
+    cipher: 'AES-256-GCM',
+  },
+
+  // Automate cible.
+  plc: {
+    model: 'WAGO 750-8217',
+    runtime: 'CODESYS V3.5 SP19',
+    modem: 'Quectel EC25 · SIM data Orange',
+    // URL fixe de l'interface (WebVisu Codesys ou passerelle) une fois le tunnel ouvert.
+    dataUrl: 'http://10.8.0.1:8080/webvisu',
+  },
+
+  pollingIntervalMs: 1000,
+  historyLength: 90,
+  // Drapeau global : passe a false quand on branche un vrai PlcDataSource.
+  simulated: true,
+}
+
+// ---------------------------------------------------------------------------
+// Catalogue des paramètres — mêmes noms EXACTS que les variables Codesys.
+// ---------------------------------------------------------------------------
 
 // Metadonnees par groupe (libelle + couleur d'accent, coherentes avec la DA).
 export const GROUP_META: Record<MetricGroup, { label: string; color: string }> = {

@@ -1,7 +1,6 @@
 import type { PlcDataSource } from './PlcDataSource'
 import type { HistoryPoint, Snapshot } from '../../types/telemetry'
-import { CONFIG } from '../config'
-import { SEUILS } from '../../data/measurementPoints'
+import { CONFIG, SEUILS } from '../../config'
 
 // Acceleration du temps simule : 1 s reelle = SIM_DT s simulees,
 // pour que le cycle jour/nuit, la batterie et les ballons evoluent en demo.

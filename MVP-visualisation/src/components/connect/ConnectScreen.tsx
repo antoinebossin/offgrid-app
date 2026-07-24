@@ -1,6 +1,6 @@
 import { Leaf, Power, ShieldCheck, Info } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
-import { CONFIG } from '../../services/config'
+import { CONFIG } from '../../config'
 import { StatusBar } from '../StatusBar'
 import { ConnectionSteps } from './ConnectionSteps'
 
@@ -14,11 +14,15 @@ export function ConnectScreen() {
       <div className="connect">
         <div className="brand">
           <span className="brand-mark">
-            <Leaf size={22} color="#34d399" />
+            {CONFIG.site.logoSrc ? (
+              <img src={CONFIG.site.logoSrc} alt={CONFIG.site.name} width={22} height={22} />
+            ) : (
+              <Leaf size={22} color="#34d399" />
+            )}
           </span>
           <div>
-            <div className="brand-name">Off-the-Grid</div>
-            <div className="brand-sub">Montchauvel · Pilotage à distance</div>
+            <div className="brand-name">{CONFIG.site.name}</div>
+            <div className="brand-sub">{CONFIG.site.tagline}</div>
           </div>
         </div>
 
