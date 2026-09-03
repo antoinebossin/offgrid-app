@@ -4,6 +4,8 @@ import { PhoneFrame } from './components/PhoneFrame'
 import { ConnectScreen } from './components/connect/ConnectScreen'
 import { Dashboard } from './components/dashboard/Dashboard'
 import { ProfileScreen } from './components/profile/ProfileScreen'
+import { RealHome } from './components/home/RealHome'
+import { CONFIG } from './config'
 
 function Screen() {
   const { state } = useApp()
@@ -69,6 +71,20 @@ function DemoSidebar() {
 }
 
 export default function App() {
+  // App reelle (celle qu'on ajoute a l'ecran d'accueil) : pas de handshake VPN
+  // anime ni de tableau de bord simule, juste le rappel des deux gestes manuels
+  // et le bouton Pilotage vers la vraie WebVisu.
+  if (!CONFIG.simulated) {
+    return (
+      <div className="app-shell">
+        <div className="app-bg" aria-hidden />
+        <PhoneFrame>
+          <RealHome />
+        </PhoneFrame>
+      </div>
+    )
+  }
+
   return (
     <AppProvider>
       <div className="app-shell">

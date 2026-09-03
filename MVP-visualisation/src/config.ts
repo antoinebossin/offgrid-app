@@ -55,8 +55,13 @@ export const CONFIG = {
 
   pollingIntervalMs: 1000,
   historyLength: 90,
-  // Drapeau global : passe a false quand on branche un vrai PlcDataSource.
-  simulated: true,
+  // Drapeau global :
+  // - true  -> vitrine commerciale (handshake VPN anime + tableau de bord simule).
+  // - false -> app reelle pour l'usage quotidien : ecran d'accueil qui rappelle
+  //   d'ouvrir OpenVPN Connect puis un bouton Pilotage vers la vraie WebVisu
+  //   (CONFIG.plc.dataUrl). C'est cette variante qu'on met sur l'ecran d'accueil
+  //   du telephone.
+  simulated: false,
 }
 
 // ---------------------------------------------------------------------------
