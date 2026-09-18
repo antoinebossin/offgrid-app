@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="‹ Retour"
+            android:textColor="@color/textDim"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Mot de passe oublié"
+            android:textColor="@color/text"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Etape 1 : saisie du code de secours -->
+        <LinearLayout
+            android:id="@+id/stepCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Saisissez le code de secours remis à la mise en service. L'installateur en conserve une copie dans le dossier de l'installation."
+                android:textColor="@color/textDim"
+                android:textSize="13sp" />
+
+            <TextView
+                style="@style/FieldLabel"
+                android:text="Code de secours" />
+
+            <EditText
+                android:id="@+id/recCode"
+                style="@style/FieldInput"
+                android:fontFamily="monospace"
+                android:hint="XXXX-XXXX-XXXX-XXXX"
+                android:inputType="textCapCharacters|textNoSuggestions" />
+
+            <TextView
+                style="@style/FieldHint"
+                android:text="Les tirets, espaces et minuscules sont sans importance." />
+
+            <Button
+                android:id="@+id/btnCheckCode"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/accent"
+                android:text="Valider"
+                android:textAllCaps="false"
+                android:textColor="@color/bg"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Etape 2 : nouveau mot de passe -->
+        <LinearLayout
+            android:id="@+id/stepPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Code accepté. Choisissez un nouveau mot de passe."
+                android:textColor="@color/textDim"
+                android:textSize="13sp" />
+
+            <TextView
+                style="@style/FieldLabel"
+                android:text="Nouveau mot de passe" />
+
+            <EditText
+                android:id="@+id/recPassword"
+                style="@style/FieldInput"
+                android:inputType="textPassword" />
+
+            <TextView
+                style="@style/FieldLabel"
+                android:text="Confirmer" />
+
+            <EditText
+                android:id="@+id/recConfirm"
+                style="@style/FieldInput"
+                android:inputType="textPassword" />
+
+            <TextView
+                style="@style/FieldHint"
+                android:text="6 caractères minimum." />
+
+            <Button
+                android:id="@+id/btnSavePassword"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/accent"
+                android:text="Enregistrer"
+                android:textAllCaps="false"
+                android:textColor="@color/bg"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Etape 3 : nouveau code de secours, affiche une seule fois -->
+        <LinearLayout
+            android:id="@+id/stepNewCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/panel"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <TextView
+                    android:id="@+id/recNewCode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="monospace"
+                    android:gravity="center"
+                    android:letterSpacing="0.1"
+                    android:textColor="@color/text"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Le code précédent ne fonctionne plus. Notez celui-ci et transmettez-le à l'installateur pour qu'il mette à jour le dossier de l'installation."
+                android:textColor="@color/textDim"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/btnCodeNoted"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/accent"
+                android:text="J'ai noté le code"
+                android:textAllCaps="false"
+                android:textColor="@color/bg"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/recMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

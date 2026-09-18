@@ -10,6 +10,21 @@
 
 import type { MeasurementPoint, MetricGroup } from './types/telemetry'
 
+/**
+ * Deux variantes de build :
+ *
+ *  - build d'un site livre (defaut) — les valeurs ci-dessous sont utilisees
+ *    telles quelles au premier demarrage ; l'app s'ouvre deja configuree.
+ *  - build generique (`npm run build:generique`, VITE_PRESET=aucun) — les
+ *    valeurs de site sont ignorees, l'app demarre non configuree et demande sa
+ *    configuration dans l'ecran dedie. C'est la variante destinee a une
+ *    distribution large, ou un binaire unique sert tous les clients.
+ *
+ * Dans les deux cas, ce que l'utilisateur enregistre dans l'app fait ensuite
+ * autorite sur ces valeurs (voir services/settings/settingsStore.ts).
+ */
+export const FACTORY_PRESET = import.meta.env.VITE_PRESET !== 'aucun'
+
 /** Identite du site (nom, logo, localisation) — a changer pour dupliquer l'app. */
 export interface SiteIdentity {
   /** Nom affiche dans le header / l'ecran de connexion. */
@@ -51,6 +66,38 @@ export const CONFIG = {
     // pour valider la connexion bout-en-bout jusqu'à la vraie WebVisu. À remplacer par
     // l'adresse définitive une fois celle-ci connue.
     dataUrl: 'https://100.96.1.18/webvisu/webvisu.htm',
+  },
+
+  // -------------------------------------------------------------------------
+  // Verrou d'acces a l'application (Delivrable B du contrat).
+  // Le mot de passe en clair n'apparait NULLE PART : seule son empreinte
+  // PBKDF2-SHA-256 salee est publiee ci-dessous. Pour le definir ou le changer :
+  //
+  //     npm run set-password
+  //
+  // (le script met a jour ce bloc ET son equivalent dans l'app Android).
+  // Le verrou ne s'applique qu'en mode reel : la vitrine commerciale
+  // (simulated: true) reste librement consultable, elle n'expose aucune donnee.
+  // -------------------------------------------------------------------------
+  auth: {
+    /**
+   * Valeurs d'usine du verrou. Elles amorcent l'app au premier demarrage ;
+   * ensuite, c'est l'ecran Securite de l'app qui fait foi.
+   */
+  /** false = aucun verrou (l'app s'ouvre directement). */
+    enabled: true,
+    /** Sel aleatoire, base64 — regenere a chaque changement de mot de passe. */
+    salt: 'dn/ILMQP0ogGlwdlo8XgKA==',
+    /** Empreinte PBKDF2-SHA-256 du mot de passe, base64. */
+    hash: '2fJqjLzO0vOG0X0iIVQZPy6sA7Icn/LYBkKG/UarZ84=',
+    /** Nombre d'iterations PBKDF2 utilise pour produire l'empreinte. */
+    iterations: 210000,
+    /** Duree pendant laquelle l'app reste deverrouillee, en minutes. */
+    unlockMinutes: 15,
+    /** Nombre d'essais rates avant temporisation. */
+    maxAttempts: 5,
+    /** Duree de la premiere temporisation, en secondes (doublee ensuite). */
+    lockoutSeconds: 60,
   },
 
   pollingIntervalMs: 1000,

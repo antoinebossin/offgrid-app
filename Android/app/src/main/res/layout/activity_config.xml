@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="‹ Retour"
+            android:textColor="@color/textDim"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Configuration"
+            android:textColor="@color/text"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Ces réglages décrivent l'installation pilotée par cette application. Les modifier ici suffit à la faire pointer vers une autre installation — sans rien recompiler."
+            android:textColor="@color/textDim"
+            android:textSize="13sp" />
+
+        <TextView
+            style="@style/FieldLabel"
+            android:text="Adresse de la WebVisu" />
+
+        <EditText
+            android:id="@+id/cfgUrl"
+            style="@style/FieldInput"
+            android:hint="https://10.0.0.1/webvisu/webvisu.htm"
+            android:inputType="textUri" />
+
+        <TextView
+            style="@style/FieldHint"
+            android:text="Adresse servie par l'automate, joignable une fois le tunnel OpenVPN établi. C'est elle qu'ouvre le bouton Pilotage." />
+
+        <TextView
+            style="@style/FieldLabel"
+            android:text="Nom du site" />
+
+        <EditText
+            android:id="@+id/cfgName"
+            style="@style/FieldInput"
+            android:hint="Nom de l'installation"
+            android:inputType="text" />
+
+        <TextView
+            style="@style/FieldLabel"
+            android:text="Sous-titre" />
+
+        <EditText
+            android:id="@+id/cfgTagline"
+            style="@style/FieldInput"
+            android:hint="Commune · Pilotage à distance"
+            android:inputType="text" />
+
+        <TextView
+            style="@style/FieldLabel"
+            android:text="Localisation" />
+
+        <EditText
+            android:id="@+id/cfgLocation"
+            style="@style/FieldInput"
+            android:hint="Commune"
+            android:inputType="text" />
+
+        <TextView
+            style="@style/FieldLabel"
+            android:text="Profil OpenVPN" />
+
+        <EditText
+            android:id="@+id/cfgVpn"
+            style="@style/FieldInput"
+            android:hint="installation.ovpn"
+            android:inputType="text" />
+
+        <TextView
+            style="@style/FieldHint"
+            android:text="Rappel affiché à l'écran. Le tunnel lui-même est établi par l'application OpenVPN Connect, en dehors de celle-ci." />
+
+        <TextView
+            style="@style/FieldLabel"
+            android:text="Modèle de l'automate" />
+
+        <EditText
+            android:id="@+id/cfgModel"
+            style="@style/FieldInput"
+            android:hint="WAGO 750-8217"
+            android:inputType="text" />
+
+        <TextView
+            android:id="@+id/cfgMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/accent"
+            android:text="Enregistrer"
+            android:textAllCaps="false"
+            android:textColor="@color/bg"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="@color/panel"
+            android:text="Revenir aux valeurs d'origine"
+            android:textAllCaps="false"
+            android:textColor="@color/textDim" />
+
+    </LinearLayout>
+</ScrollView>

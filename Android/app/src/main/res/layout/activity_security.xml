@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:text="‹ Retour"
+            android:textColor="@color/textDim"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="20dp"
+            android:text="Sécurité"
+            android:textColor="@color/text"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <!-- Etat courant de la protection -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/panel"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <TextView
+                android:id="@+id/secStatusTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/secStatusSub"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:textColor="@color/textDim"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Code de secours fraichement genere : affiche une seule fois -->
+        <LinearLayout
+            android:id="@+id/codeBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:background="@color/panel"
+            android:orientation="vertical"
+            android:padding="18dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/codeValue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:gravity="center"
+                android:letterSpacing="0.1"
+                android:textColor="@color/text"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="Notez ce code maintenant et transmettez-le à l'installateur, qui le conserve dans le dossier de l'installation. C'est le seul moyen de retrouver l'accès si le mot de passe est oublié. Il ne sera plus jamais affiché."
+                android:textColor="@color/textDim"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/btnCodeNoted"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="@color/accent"
+                android:text="J'ai noté le code"
+                android:textAllCaps="false"
+                android:textColor="@color/bg"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Actions disponibles quand un mot de passe existe -->
+        <LinearLayout
+            android:id="@+id/actionList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/rowChange"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/panel"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="14dp"
+                android:text="Changer le mot de passe"
+                android:textColor="@color/text"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:id="@+id/rowRegenerate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/panel"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Générer un nouveau code de secours"
+                    android:textColor="@color/text"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/regenerateSub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rowDisable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/panel"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:padding="14dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Retirer la protection"
+                    android:textColor="@color/text"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:text="L'application s'ouvrira sans mot de passe"
+                    android:textColor="@color/muted"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnDefine"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="18dp"
+            android:backgroundTint="@color/accent"
+            android:text="Définir un mot de passe"
+            android:textAllCaps="false"
+            android:textColor="@color/bg"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <!-- Formulaire de l'action en cours -->
+        <LinearLayout
+            android:id="@+id/formBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/currentBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="Mot de passe actuel" />
+
+                <EditText
+                    android:id="@+id/secCurrent"
+                    style="@style/FieldInput"
+                    android:inputType="textPassword" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/newBlock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="Nouveau mot de passe" />
+
+                <EditText
+                    android:id="@+id/secNew"
+                    style="@style/FieldInput"
+                    android:inputType="textPassword" />
+
+                <TextView
+                    style="@style/FieldLabel"
+                    android:text="Confirmer" />
+
+                <EditText
+                    android:id="@+id/secConfirm"
+                    style="@style/FieldInput"
+                    android:inputType="textPassword" />
+
+                <TextView
+                    style="@style/FieldHint"
+                    android:text="6 caractères minimum." />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnApply"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/accent"
+                android:text="Enregistrer"
+                android:textAllCaps="false"
+                android:textColor="@color/bg"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnCancel"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/panel"
+                android:text="Annuler"
+                android:textAllCaps="false"
+                android:textColor="@color/textDim" />
+        </LinearLayout>
+
+        <!-- Delai de reverrouillage -->
+        <LinearLayout
+            android:id="@+id/delayBlock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                style="@style/FieldLabel"
+                android:text="Redemander le mot de passe après" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/delayAlways"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/panel"
+                    android:text="Toujours"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textDim"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/delay5"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/panel"
+                    android:text="5 min"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textDim"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/delay15"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_marginEnd="6dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/panel"
+                    android:text="15 min"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textDim"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/delay60"
+                    android:layout_width="0dp"
+                    android:layout_height="44dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/panel"
+                    android:text="60 min"
+                    android:textAllCaps="false"
+                    android:textColor="@color/textDim"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/FieldHint"
+                android:text="Délai d'inactivité. Tant que l'application est ouverte au premier plan, le mot de passe n'est pas redemandé." />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/secMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</ScrollView>

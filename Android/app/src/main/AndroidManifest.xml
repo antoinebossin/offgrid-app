@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Necessaire pour la WebView (WebVisu) et pour joindre le Play Store si
+         OpenVPN Connect n'est pas installe. -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="false"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.OffGrid">
+
+        <!-- Point d'entree : ecran de deverrouillage (Delivrable B du contrat).
+             MainActivity n'est jamais lancee directement. -->
+        <activity
+            android:name=".LockActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".RecoveryActivity"
+            android:exported="false"
+            android:label="Mot de passe oublié"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".SettingsActivity"
+            android:exported="false"
+            android:label="Réglages" />
+
+        <activity
+            android:name=".ConfigActivity"
+            android:exported="false"
+            android:label="Configuration"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".SecurityActivity"
+            android:exported="false"
+            android:label="Sécurité"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".WebVisuActivity"
+            android:exported="false"
+            android:label="Pilotage" />
+
+    </application>
+
+</manifest>

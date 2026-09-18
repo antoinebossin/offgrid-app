@@ -364,3 +364,197 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .phone-notch { display: none; }
 }
 /* fin — styles ampoules / vannes / badge ajoutés sans toucher à la DA */
+
+/* ---------- Verrou d'acces (Delivrable B) ---------- */
+.lock-badge {
+  width: 52px; height: 52px; border-radius: 16px;
+  display: grid; place-items: center;
+  background: rgba(52, 211, 153, 0.12); color: var(--accent);
+  border: 1px solid rgba(52, 211, 153, 0.28);
+}
+.lock-form { width: 100%; max-width: 270px; margin-top: 22px; }
+.lock-field {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0 6px 0 14px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.lock-field:focus-within { border-color: rgba(52, 211, 153, 0.45); background: var(--panel-strong); }
+.lock-field input {
+  flex: 1; min-width: 0; background: none; border: none; outline: none;
+  font-family: inherit; font-size: 15px; font-weight: 600; color: var(--text);
+  padding: 13px 0; letter-spacing: 0.04em;
+}
+.lock-field input::placeholder { color: var(--muted); font-weight: 600; letter-spacing: normal; }
+.lock-field input:disabled { opacity: 0.5; }
+.lock-reveal {
+  width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+  display: grid; place-items: center; color: var(--muted);
+}
+.lock-reveal:active { background: var(--panel-strong); }
+.lock-submit {
+  width: 100%; margin-top: 10px; padding: 13px 0;
+  border-radius: var(--radius-sm);
+  background: var(--accent); color: #062015;
+  font-size: 14.5px; font-weight: 800; letter-spacing: 0.2px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.lock-submit:active { transform: scale(0.98); }
+.lock-submit:disabled { opacity: 0.4; cursor: default; transform: none; }
+.lock-msg { min-height: 20px; margin-top: 12px; text-align: center; }
+.lock-err {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--danger);
+}
+
+/* Pied de l'ecran reel : badge automate + bouton de verrouillage manuel */
+.home-footer { display: flex; align-items: center; justify-content: center; gap: 10px; }
+.lock-now {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 999px;
+  background: var(--panel); border: 1px solid var(--border);
+  font-size: 11px; font-weight: 600; color: var(--text-dim);
+}
+.lock-now:active { background: var(--panel-strong); }
+/* Champ identifiant masque : requis par les gestionnaires de mots de passe,
+   jamais visible ni atteignable au clavier. */
+.lock-username {
+  position: absolute; width: 1px; height: 1px;
+  opacity: 0; pointer-events: none; border: none; padding: 0;
+}
+
+/* ---------- Ecrans secondaires (reglages, configuration, securite) ---------- */
+.screen { display: flex; flex-direction: column; height: 100%; }
+.screen-header {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 16px 10px; flex-shrink: 0;
+}
+.screen-back {
+  width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+  display: grid; place-items: center; color: var(--text-dim);
+}
+.screen-back:active { background: var(--panel-strong); }
+.screen-title { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; }
+.screen-body { flex: 1; overflow-y: auto; padding: 4px 20px 26px; }
+.screen-intro { font-size: 12.5px; color: var(--text-dim); line-height: 1.55; margin: 0 0 18px; }
+
+.icon-btn {
+  width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+  display: grid; place-items: center; color: var(--text-dim);
+  background: var(--panel); border: 1px solid var(--border);
+}
+.icon-btn:active { background: var(--panel-strong); }
+
+/* ---------- Listes de navigation ---------- */
+.menu-list { display: flex; flex-direction: column; gap: 8px; padding: 6px 20px 0; }
+.screen-body .menu-list { padding: 0; }
+.menu-row {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 14px;
+}
+.menu-row:active { background: var(--panel-strong); }
+.menu-ico {
+  width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+  display: grid; place-items: center;
+  background: rgba(52, 211, 153, 0.12); color: var(--accent);
+}
+.menu-txt { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.menu-label { font-size: 13.5px; font-weight: 700; }
+.menu-sub {
+  font-size: 11.5px; color: var(--muted); font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* ---------- Formulaires ---------- */
+.form-label {
+  display: block; font-size: 11px; font-weight: 700; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.06em; margin: 16px 0 6px;
+}
+.form-field {
+  display: flex; align-items: center;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0 14px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.form-field:focus-within { border-color: rgba(52, 211, 153, 0.45); background: var(--panel-strong); }
+.form-field input {
+  flex: 1; min-width: 0; background: none; border: none; outline: none;
+  font-family: inherit; font-size: 14px; font-weight: 600; color: var(--text);
+  padding: 12px 0;
+}
+.form-field input::placeholder { color: var(--muted); font-weight: 500; }
+.form-field input.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+}
+.form-hint { font-size: 11.5px; color: var(--muted); line-height: 1.5; margin: 7px 0 0; }
+.form-msg {
+  display: flex; align-items: flex-start; gap: 6px;
+  font-size: 12px; font-weight: 600; line-height: 1.45; margin-top: 16px;
+}
+.form-msg svg { flex-shrink: 0; margin-top: 2px; }
+.form-err { color: var(--danger); }
+.form-ok { color: var(--accent); }
+.form-submit {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: 100%; margin-top: 18px; padding: 13px 0;
+  border-radius: var(--radius-sm);
+  background: var(--accent); color: #062015;
+  font-size: 14.5px; font-weight: 800; letter-spacing: 0.2px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+.form-submit:active { transform: scale(0.98); }
+.form-submit:disabled { opacity: 0.4; cursor: default; transform: none; }
+.form-secondary {
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+  width: 100%; margin-top: 10px; padding: 11px 0;
+  border-radius: var(--radius-sm);
+  background: var(--panel); border: 1px solid var(--border);
+  font-size: 13px; font-weight: 700; color: var(--text-dim);
+}
+.form-secondary:active { background: var(--panel-strong); }
+
+/* ---------- Carte d'etat (ecran Securite) ---------- */
+.status-card {
+  display: flex; align-items: flex-start; gap: 11px;
+  border-radius: var(--radius-sm); padding: 13px 14px;
+}
+.status-card.ok {
+  background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.28); color: var(--accent);
+}
+.status-card.warn {
+  background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3); color: var(--warn);
+}
+.status-card svg { flex-shrink: 0; margin-top: 1px; }
+.status-title { font-size: 13.5px; font-weight: 800; }
+.status-sub { font-size: 11.5px; color: var(--text-dim); font-weight: 600; line-height: 1.45; margin-top: 3px; }
+
+/* ---------- Code de secours ---------- */
+.code-panel {
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  background: var(--panel-strong); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: 22px 14px;
+}
+.code-value {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 17px; font-weight: 700; letter-spacing: 0.1em;
+  color: var(--text); text-align: center; word-break: break-all;
+}
+
+/* ---------- Bandeau premier demarrage ---------- */
+.banner {
+  display: flex; align-items: center; gap: 9px; width: 100%; text-align: left;
+  margin-top: 12px; padding: 10px 12px; border-radius: var(--radius-sm);
+  background: rgba(251, 191, 36, 0.1); border: 1px solid rgba(251, 191, 36, 0.3);
+  color: var(--warn); font-size: 12px; font-weight: 600;
+}
+.banner:active { background: rgba(251, 191, 36, 0.16); }
+.banner svg { flex-shrink: 0; }
+
+/* ---------- Lien discret sous l'ecran de verrouillage ---------- */
+.lock-link {
+  display: block; width: 100%; margin-top: 4px; padding: 8px 0;
+  font-size: 12px; font-weight: 600; color: var(--text-dim); text-align: center;
+}
+.lock-link:active { color: var(--text); }

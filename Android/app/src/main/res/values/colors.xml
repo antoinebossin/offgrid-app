@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Meme palette que MVP-visualisation/src/index.css, pour une transition
+         visuelle continue entre l'app et la WebVisu. -->
+    <color name="bg">#070B14</color>
+    <color name="panel">#101826</color>
+    <color name="text">#F5F7FA</color>
+    <color name="textDim">#9AA6B8</color>
+    <color name="muted">#647089</color>
+    <color name="accent">#34D399</color>
+    <color name="danger">#F87171</color>
+    <color name="warn">#FBBF24</color>
+</resources>

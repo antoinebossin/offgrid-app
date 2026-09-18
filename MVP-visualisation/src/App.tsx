@@ -1,11 +1,96 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { AppProvider, useApp } from './context/AppContext'
+import { SettingsProvider, useSettings } from './context/SettingsContext'
 import { PhoneFrame } from './components/PhoneFrame'
 import { ConnectScreen } from './components/connect/ConnectScreen'
 import { Dashboard } from './components/dashboard/Dashboard'
 import { ProfileScreen } from './components/profile/ProfileScreen'
-import { RealHome } from './components/home/RealHome'
+import { RealApp } from './components/home/RealApp'
+import { LockScreen } from './components/auth/LockScreen'
+import { RecoveryScreen } from './components/auth/RecoveryScreen'
+import { isGateActive, isUnlocked, lock, markUnlocked } from './services/auth/passwordGate'
 import { CONFIG } from './config'
+
+/** Coquille visuelle commune : fond degrade + cadre telephone. */
+function Shell({ children }: { children: ReactNode }) {
+  return (
+    <div className="app-shell">
+      <div className="app-bg" aria-hidden />
+      <PhoneFrame>{children}</PhoneFrame>
+    </div>
+  )
+}
+
+/**
+ * Verrou d'acces (Delivrable B). Tant que le mot de passe n'a pas ete saisi,
+ * rien d'autre que l'ecran de deverrouillage n'est monte.
+ *
+ * Deux garde-fous importants :
+ *  - tant qu'aucun mot de passe n'est defini, il n'y a pas de verrou du tout —
+ *    une app fraichement installee ne bloque jamais son nouvel utilisateur ;
+ *  - le deverrouillage vaut un delai d'INACTIVITE : tant que la page est au
+ *    premier plan, l'echeance est repoussee ; des que l'app passe en
+ *    arriere-plan, le compte a rebours court.
+ */
+function Gate({ children }: { children: (lockNow: () => void) => ReactNode }) {
+  const { settings } = useSettings()
+  const auth = settings.auth
+  const [unlocked, setUnlocked] = useState(() => isUnlocked(auth))
+  const [recovering, setRecovering] = useState(false)
+
+  useEffect(() => {
+    if (!isGateActive(auth)) {
+      setUnlocked(true)
+      return
+    }
+    if (!unlocked) return
+    const tick = () => {
+      if (!isUnlocked(auth)) {
+        setUnlocked(false)
+      } else if (document.visibilityState === 'visible') {
+        markUnlocked(auth)
+      }
+    }
+    const id = window.setInterval(tick, 15_000)
+    document.addEventListener('visibilitychange', tick)
+    window.addEventListener('focus', tick)
+    return () => {
+      window.clearInterval(id)
+      document.removeEventListener('visibilitychange', tick)
+      window.removeEventListener('focus', tick)
+    }
+  }, [auth, unlocked])
+
+  if (!unlocked) {
+    if (recovering) {
+      return (
+        <Shell>
+          <RecoveryScreen
+            onBack={() => setRecovering(false)}
+            onDone={() => {
+              setRecovering(false)
+              setUnlocked(true)
+            }}
+          />
+        </Shell>
+      )
+    }
+    return (
+      <Shell>
+        <LockScreen onUnlock={() => setUnlocked(true)} onForgot={() => setRecovering(true)} />
+      </Shell>
+    )
+  }
+
+  return (
+    <>
+      {children(() => {
+        lock()
+        setUnlocked(false)
+      })}
+    </>
+  )
+}
 
 function Screen() {
   const { state } = useApp()
@@ -76,12 +161,15 @@ export default function App() {
   // et le bouton Pilotage vers la vraie WebVisu.
   if (!CONFIG.simulated) {
     return (
-      <div className="app-shell">
-        <div className="app-bg" aria-hidden />
-        <PhoneFrame>
-          <RealHome />
-        </PhoneFrame>
-      </div>
+      <SettingsProvider>
+        <Gate>
+          {(lockNow) => (
+            <Shell>
+              <RealApp onLock={lockNow} />
+            </Shell>
+          )}
+        </Gate>
+      </SettingsProvider>
     )
   }
 
