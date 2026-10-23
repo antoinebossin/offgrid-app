@@ -35,7 +35,7 @@ export interface SiteIdentity {
   location: string
   /**
    * Chemin vers un logo (place le fichier dans public/ et reference-le ici,
-   * ex: '/logo-client.svg'). Laisser `null` pour utiliser l'icone par defaut.
+   * ex: './logo-client.png' — chemin relatif, cf. base './' de vite.config.ts). Laisser `null` pour utiliser l'icone par defaut.
    */
   logoSrc: string | null
 }
@@ -45,7 +45,7 @@ export const CONFIG = {
     name: 'Off-the-Grid',
     tagline: 'Montchauvel · Pilotage à distance',
     location: 'Montchauvel',
-    logoSrc: null,
+    logoSrc: './logo.png',
   } satisfies SiteIdentity,
 
   // Profil / endpoint OpenVPN (la "URL fixe" evoquee par Francois).

@@ -74,7 +74,15 @@ function read(): Stored | null {
 }
 
 export function loadSettings(): Settings {
-  return read()?.settings ?? factorySettings()
+  const stored = read()?.settings
+  if (!stored) return factorySettings()
+  // Le logo n'est pas modifiable dans l'app : c'est un fichier livre avec la
+  // build. Un telephone qui a deja enregistre ses reglages (logo absent a
+  // l'epoque) recupere donc celui de config.ts.
+  if (!stored.site.logoSrc && FACTORY_PRESET && CONFIG.site.logoSrc) {
+    return { ...stored, site: { ...stored.site, logoSrc: CONFIG.site.logoSrc } }
+  }
+  return stored
 }
 
 /** L'utilisateur a-t-il deja enregistre une configuration sur cet appareil ? */

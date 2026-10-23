@@ -82,7 +82,13 @@ export function LockScreen({ onUnlock, onForgot }: { onUnlock: () => void; onFor
         <div className="brand">
           <span className="brand-mark">
             {settings.site.logoSrc ? (
-              <img src={settings.site.logoSrc} alt={settings.site.name} width={22} height={22} />
+              <img
+                src={settings.site.logoSrc}
+                alt={settings.site.name}
+                width={34}
+                height={34}
+                style={{ objectFit: 'contain' }}
+              />
             ) : (
               <Leaf size={22} color="#34d399" />
             )}

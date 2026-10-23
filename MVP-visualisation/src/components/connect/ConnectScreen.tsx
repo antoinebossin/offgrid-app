@@ -15,7 +15,13 @@ export function ConnectScreen() {
         <div className="brand">
           <span className="brand-mark">
             {CONFIG.site.logoSrc ? (
-              <img src={CONFIG.site.logoSrc} alt={CONFIG.site.name} width={22} height={22} />
+              <img
+                src={CONFIG.site.logoSrc}
+                alt={CONFIG.site.name}
+                width={34}
+                height={34}
+                style={{ objectFit: 'contain' }}
+              />
             ) : (
               <Leaf size={22} color="#34d399" />
             )}
